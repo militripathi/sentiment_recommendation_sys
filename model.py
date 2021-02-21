@@ -2,28 +2,29 @@ import inflect as inflect
 import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.decomposition import TruncatedSVD
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.metrics.pairwise import cosine_similarity
+# from sklearn.decomposition import TruncatedSVD
 from scipy.sparse.linalg import svds
 import re, string, unicodedata
 import nltk
 import contractions
 from bs4 import BeautifulSoup
-from nltk import word_tokenize, sent_tokenize
+# from nltk import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.lancaster import LancasterStemmer
 from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
-import xgboost as xgb
-from xgboost import XGBClassifier
-from contractions import contractions_dict
-
-import json
-import bs4 as bs
-import urllib.request
+# from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
+# import xgboost as xgb
+# from xgboost import XGBClassifier
+# from contractions import contractions_dict
+#
+# import json
+# import bs4 as bs
+# import urllib.request
 import pickle
-import requests
+# import requests
+# import sklearn.externals
 
 # load the nlp model and tfidf vectorizer from disk
 filename = 'models/xg_model.pkl'
