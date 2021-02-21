@@ -130,10 +130,10 @@ def rcmd(username):
 
     for i in l:
         Rating = sentiment(i)
-        print("Sentiment: ", Rating)
+        # print("Sentiment: ", Rating)
         ln = len(Rating)
         Avg_rat = Rating.sum()/ln
-        print("Avg_rat: " , Avg_rat)
+        # print("Avg_rat: " , Avg_rat)
         recommend_df.loc[recommend_df['product_title'] == i,'Avg_rat'] = round(Avg_rat*100,2)
 
     top5 = recommend_df.sort_values('Avg_rat', ascending=False).head(5)
@@ -291,8 +291,8 @@ def recommend_it(predictions_df, itm_df, original_ratings_df, num_recommendation
                  sort_values(['reviews_rating'], ascending=False)
                  )
 
-    print('User {0} has already purchased {1} items.'.format(ruserId, user_full.shape[0]))
-    print('Recommending the highest {0} predicted  items not already purchased.'.format(num_recommendations))
+    # print('User {0} has already purchased {1} items.'.format(ruserId, user_full.shape[0]))
+    # print('Recommending the highest {0} predicted  items not already purchased.'.format(num_recommendations))
 
     # Recommend the highest predicted rating items that the user hasn't bought yet.
     recommendations = (itm_df[~itm_df['product_title'].isin(user_full['product_title'])].
