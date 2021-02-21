@@ -1,10 +1,10 @@
-from flask import Flask, jsonify,  request, render_template
-from sklearn.externals import joblib
-import numpy as np
+# from flask import Flask, jsonify,  request, render_template
+# from sklearn.externals import joblib
+# import numpy as np
 from flask import Flask, render_template, request
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.decomposition import TruncatedSVD
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.metrics.pairwise import cosine_similarity
+# from sklearn.decomposition import TruncatedSVD
 import model
 
 app = Flask(__name__)
