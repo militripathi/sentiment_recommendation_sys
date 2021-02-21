@@ -10,6 +10,7 @@ idna==2.10
 inflect==5.0.2
 itsdangerous==1.1.0
 Jinja2==2.11.3
+joblib==1.0.1
 jsonify==0.5
 MarkupSafe==1.1.1
 nltk==3.5
