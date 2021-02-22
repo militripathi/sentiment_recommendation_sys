@@ -119,7 +119,7 @@ def rcmd(username):
 
     top5 = recommend_df.sort_values('Avg_rat', ascending=False).head(5)
 
-    top5.rename(columns={'product_title':'Recommended Products','Avg_rat':'Postive Sentiments'},inplace=True)
+    top5.rename(columns={'product_title':'Recommended Products','Avg_rat':'Postive Sentiments %'},inplace=True)
     # top5['Recommended Products'] = top5['product_title']
 
     # print("List: " , l)
