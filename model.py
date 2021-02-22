@@ -27,9 +27,9 @@ import pickle
 # import sklearn.externals
 
 # load the nlp model and tfidf vectorizer from disk
-filename = 'models/xg_model.pkl'
+filename = 'models/nb_cv_sm.pkl'
 clf = pickle.load(open(filename, 'rb'))
-vectorizer = pickle.load(open('models/tranform.pkl','rb'))
+vectorizer = pickle.load(open('models/transform_cv.pkl','rb'))
 
 def preprocess(product_ratings):
     product_ratings.drop(['reviews_doRecommend', 'reviews_didPurchase', 'categories', 'reviews_date', 'manufacturer', 'categories',
@@ -80,25 +80,6 @@ def rcmd(username):
 
     data = preprocess(data_in)
 
-    # product_ratings.drop(
-    #     ['reviews_doRecommend', 'reviews_didPurchase', 'categories', 'reviews_date', 'manufacturer', 'categories',
-    #      'brand', 'reviews_text', 'reviews_title', 'reviews_userCity', 'reviews_userProvince', 'user_sentiment', 'id'],
-    #     axis=1, inplace=True)
-    #
-    # prod_ratings = product_ratings.rename(columns={'name': 'product_title', 'reviews_username': 'reviews_username'})
-    # prod_ratings = prod_ratings.dropna()
-    #
-    # counts1 = prod_ratings['reviews_username'].value_counts()
-    # counts = prod_ratings['product_title'].value_counts()
-    #
-    # df = prod_ratings[prod_ratings['reviews_username'].isin(counts1[counts1 >= 1].index)]
-    # df = df[df['product_title'].isin(counts[counts >= 10].index)]
-    #
-    # prod_ratings.head()
-    # df1 = df.drop_duplicates(subset=['reviews_username', 'product_title', ], keep='first')
-    # df3 = df1.sort_values(by='reviews_rating')
-    # df3 = df3.reset_index(drop=True)
-
 
     count = data.groupby("product_title", as_index=False).mean()
     items_df = count[['product_title']]
@@ -138,6 +119,9 @@ def rcmd(username):
 
     top5 = recommend_df.sort_values('Avg_rat', ascending=False).head(5)
 
+    top5.rename(columns={'product_title':'Recommended Products','Avg_rat':'Postive Sentiments'},inplace=True)
+    # top5['Recommended Products'] = top5['product_title']
+
     # print("List: " , l)
     return top5
 
@@ -149,9 +133,16 @@ def sentiment(product):
     data2['clean_reviewstext'] = data2['reviewstext'].map(lambda text: normalize_and_lemmaize(text))
 
     X_test = data2['clean_reviewstext']
-    tfidf_vect_test = vectorizer.transform(X_test)
-    tfidf_vect_test = tfidf_vect_test.toarray()
-    Pred_rating =clf.predict(tfidf_vect_test)
+
+    X_test.head()
+    # tfidf_vect_test = vectorizer.transform(X_test)
+    # tfidf_vect_test = tfidf_vect_test.toarray()
+    # Pred_rating =clf.predict(tfidf_vect_test)
+
+    count_vect_test = vectorizer.transform(X_test)
+    count_vect_test = count_vect_test.toarray()
+    Pred_rating =clf.predict(count_vect_test)
+
     return Pred_rating
 
 def strip_html(text):
@@ -308,40 +299,40 @@ def recommend_it(predictions_df, itm_df, original_ratings_df, num_recommendation
 
     return topk
 
-# converting list of string to list (eg. "["abc","def"]" to ["abc","def"])
-def convert_to_list(my_list):
-    my_list = my_list.split('","')
-    my_list[0] = my_list[0].replace('["', '')
-    my_list[-1] = my_list[-1].replace('"]', '')
-    return my_list
+# # converting list of string to list (eg. "["abc","def"]" to ["abc","def"])
+# def convert_to_list(my_list):
+#     my_list = my_list.split('","')
+#     my_list[0] = my_list[0].replace('["', '')
+#     my_list[-1] = my_list[-1].replace('"]', '')
+#     return my_list
 
 
-def get_suggestions():
-    data = pd.read_csv('datasets/sample30.csv')
-    return list(data['reviews_username'].str.capitalize())
+# def get_suggestions():
+#     data = pd.read_csv('datasets/sample30.csv')
+#     return list(data['reviews_username'].str.capitalize())
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
-
-@app.route("/")
-@app.route("/home")
-def home():
-    # suggestions = get_suggestions()
-    return render_template('index.html' )
-
-
-@app.route("/recommend", methods=["POST"])
-def similarity():
-    if (request.method == 'POST'):
-        username = request.form['User_Name']
-        rc = rcmd(username)
-        if type(rc) == type('string'):
-            m_str = rc
-        else:
-            m_str = "---".join(rc)
-            # return m_str
-        return render_template('index.html', recommend_text='Recommended Products {}'.format(m_str))
-    else:
-        return render_template('index.html')
+#
+# @app.route("/")
+# @app.route("/home")
+# def home():
+#     # suggestions = get_suggestions()
+#     return render_template('index.html' )
+#
+#
+# @app.route("/recommend", methods=["POST"])
+# def similarity():
+#     if (request.method == 'POST'):
+#         username = request.form['User_Name']
+#         rc = rcmd(username)
+#         if type(rc) == type('string'):
+#             m_str = rc
+#         else:
+#             m_str = "---".join(rc)
+#             # return m_str
+#         return render_template('index.html', recommend_text='Recommended Products {}'.format(m_str))
+#     else:
+#         return render_template('index.html')
 
